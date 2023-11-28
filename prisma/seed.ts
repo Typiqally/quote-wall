@@ -1,38 +1,41 @@
-import { PrismaClient } from '@prisma/client';
-import { faker } from "@faker-js/faker";
+import type {Quote} from '@prisma/client';
+import {faker} from '@faker-js/faker';
+import db from '$lib/database';
 
-const prisma = new PrismaClient();
-
-type Quote = {
-  text: string;
-  author: string;
-}
-
-async function getQuotes(): Promise<Quote[]> {
-  const quotes: Quote[] = [];
-  for (let i = 0; i < 10; i++) {
-    quotes.push({
-      text: faker.lorem.words({ min: 5, max: 13 }),
-      author: faker.person.fullName(),
+const generateQuotes = async (count: number) => {
+  const quotes = [];
+  for (let i = 0; i < count; i++) {
+    const newQuote = await db.quote.create({
+      data: {
+        text: faker.lorem.sentence(),
+        discordId: faker.number.int({min: 1000, max: 100000000}).toString(),
+        createdAt: faker.date.past(),
+      },
     });
+    quotes.push(newQuote);
   }
   return quotes;
-}
+};
 
-async function saveQuotesToDatabase(): Promise<void> {
-  try {
-    const quotes = await getQuotes();
-    for (const quote of quotes) {
-        await prisma.quote.create({
-            data: quote,
-        });
+const generateVotes = async (quotes: Quote[], voteCountPerQuote: number) => {
+  const votes = [];
+  for (const quote of quotes) {
+    for (let i = 0; i < voteCountPerQuote; i++) {
+      const newVote = await db.vote.create({
+        data: {
+          discordId: faker.number.int({min: 1000, max: 100000000}).toString(),
+          createdAt: faker.date.past(),
+          quote: { connect: { id: quote.id } },
+        },
+      });
+      votes.push(newVote);
     }
-    console.log('Quotes saved to the database.');
-  } catch (error) {
-    console.error('Error saving quotes:', error);
-  } finally {
-    await prisma.$disconnect();
   }
-}
+  return votes;
+};
 
-await saveQuotesToDatabase();
+generateQuotes(10)
+    .then((generatedQuotes) => {
+      const voteCountPerQuote = Math.floor(Math.random() * 10) + 1;
+      return generateVotes(generatedQuotes, voteCountPerQuote);
+    })

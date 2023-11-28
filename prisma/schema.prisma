@@ -10,12 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model quote {
+model Quote {
   id        Int      @id @default(autoincrement())
   text      String
-  author    String
+  discordId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  votes     Vote[]   @relation("QuoteVotes") // A quote can have multiple votes
 }
 
-
+model Vote {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  discordId String
+  quote     Quote    @relation("QuoteVotes", fields: [quoteId], references: [id]) // Each vote is associated with a quote
+  quoteId   Int
+}
