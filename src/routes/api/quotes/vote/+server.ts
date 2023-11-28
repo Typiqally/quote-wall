@@ -20,7 +20,7 @@ export const DELETE: RequestHandler = async (reqEvent: RequestEvent) => {
 
     return new Response(JSON.stringify(vote), responseHeaders);
   } catch (e) {
-    throw error(500, "Failed to decrement quote votes.");
+    throw error(500, "Failed to delete quote vote.");
   }
 }
 
@@ -37,6 +37,6 @@ export const POST: RequestHandler = async (reqEvent: RequestEvent) => {
 
     return new Response(JSON.stringify(vote), responseHeaders);
   } catch (e) {
-    throw error(500, "Failed to increment quote votes.");
+    throw error(500, "Failed to create quote vote.");
   }
 }
