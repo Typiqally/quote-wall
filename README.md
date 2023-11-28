@@ -22,9 +22,29 @@ The quote wall is a community project, so it seems natural to allow for the comm
 - Frontend — [TypeScript](https://www.typescriptlang.org), [Svelte](https://svelte.dev)
 - Data persistence — [SQLite](https://www.sqlite.org/index.html)
 
-<!--## Getting started
+## Getting started
 ### Prerequisites
-### Installation-->
+### Installation
+Once you've pulled the project, install dependencies with `npm install`.
+
+#### Developing
+To start a development server, run either of the following commands:
+
+```bash
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
+
+#### Building
+To create a production version of your app:
+
+```bash
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
 
 ## Contributing
 Contributions for the QuoteWall project will be exclusively handled via GitHub project boards and issues. Since the project operates as an open-source initiative, we encourage and appreciate all forms of contributions that align with the project's core objectives. For additional details, please refer to the [GitHub board]( https://github.com/users/Typiqally/projects/7/views/1).
