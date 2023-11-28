@@ -5,15 +5,11 @@
     import {onMount} from "svelte";
     import {writable} from 'svelte/store';
     import * as d3cloud from "d3-cloud";
-    import * as d3 from "d3";
-    import cloud from "d3-cloud";
 
 
     //max quotes
-    let words: {text: string; size: number; x: number; y: number }[] = [];
-    const wwords = writable<{text: string; size: number; x: number; y: number}[]>([]);
-
-    const canvasSize = 500;
+    let words: {text: string; size: number }[] = [];
+    const wwords = writable<{text: string; size: number}[]>([]);
 
     //custom array to show more data that just text?
     interface Quote {
@@ -34,14 +30,12 @@
         const tempData = [
             {text: 'quote1size10', size: 10},
             {text: 'quote2size15', size: 15},
-            {text: 'quote3size20', size: 20},
-            {text: 'quote4size30', size: 30}
+            {text: 'quote3size20', size: 20}
         ];
 
-        const layout = cloud()
-            .size([canvasSize, canvasSize])
+        const layout = d3cloud().size([500, 500])
             .words(tempData)
-            .padding(5)
+            .padding(10)
             .rotate( () => (Math.random() > 0.5 ? 0 : 90) )
             .font('Impact')
             .fontSize((d) => d.size)
@@ -49,17 +43,11 @@
 
         layout.start();
 
-        function draw(words: {text: string; size: number; x: number; y: number }[])
+        function draw(words: {text: string; size: number }[])
         {
-            //get the center of the canvas
-            const canvasCenterX = canvasSize/2;
-            const canvasCenterY = canvasSize/2;
-
-            words.forEach((word) => {
-                word.x = canvasCenterX + word.x || 0;
-                word.y = canvasCenterY + word.y || 0;
-                word.size = word.size || 10;
-            });
+            words.forEach((word) => (word.x = word.x || 0));
+            words.forEach((word) => (word.y = word.y || 0));
+            words.forEach((word) => (word.size = word.size || 10));
             $wwords = words;
         }
     });
@@ -73,25 +61,19 @@
 </script>
 
 <style>
-    text {
-        fill: steelblue;
-        transform: rotate(45);
-        text-anchor: middle; /* Center the text horizontally */
-        dominant-baseline: middle; /* Center the text vertically */
-    }
 
-    svg {
-        width: 100%;
-        height: 100%;
-    }
+    /*TODO: add style to this thing...*/
+
 </style>
 
 <svg>
-    {#each $wwords as {text, size, x, y}, i}
+    {#each $wwords as {text, size}, i}
         <text
-                x = {x}
-                y = {y}
+                x = {size}
+                y = {size}
                 font-size = {size}
+                fill = {getRandomColor()}
+                transform = {'translate(${size}, ${size}) rotate(45))'}
         >
             {text}
         </text>
