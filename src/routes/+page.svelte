@@ -55,7 +55,7 @@
 </script>
 
 <div class="word-cloud-container">
-    <WordCloud width={1920} height={1080} words={words} padding={5} backgroundColor="#000"></WordCloud>
+    <WordCloud width={1920} height={1080} words={words} padding={5}></WordCloud>
 </div>
 
 <style>
