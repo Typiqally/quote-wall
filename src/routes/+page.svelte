@@ -1,63 +1,27 @@
-<!-- index.svelte -->
-
 <script lang="ts">
     import WordCloud from "../components/WordCloud.svelte";
+    import type {Quote} from "@prisma/client";
 
-    const words = [
-        {text: 'quote1count10a', count: 10},
-        {text: 'quote2count15b', count: 15},
-        {text: 'quote3count20c', count: 20},
-        {text: 'quote4count25d', count: 25},
-        {text: 'quote5count10a', count: 10},
-        {text: 'quote6count15b', count: 15},
-        {text: 'quote7count20c', count: 20},
-        {text: 'quote8count25d', count: 25},
-        {text: 'quote1count10a', count: 10},
-        {text: 'quote2count15b', count: 15},
-        {text: 'quote3count20c', count: 20},
-        {text: 'quote4count25d', count: 25},
-        {text: 'quote5count10a', count: 10},
-        {text: 'quote6count15b', count: 15},
-        {text: 'quote7count20c', count: 20},
-        {text: 'quote8count25d', count: 25},
-        {text: 'quote1count10a', count: 10},
-        {text: 'quote2count15b', count: 15},
-        {text: 'quote3count20c', count: 20},
-        {text: 'quote4count25d', count: 25},
-        {text: 'quote5count10a', count: 10},
-        {text: 'quote6count15b', count: 15},
-        {text: 'quote7count20c', count: 20},
-        {text: 'quote8count25d', count: 25},
-        {text: 'quote2count15b', count: 15},
-        {text: 'quote3count20c', count: 20},
-        {text: 'quote4count25d', count: 25},
-        {text: 'quote5count10a', count: 10},
-        {text: 'quote6count15b', count: 15},
-        {text: 'quote7count20c', count: 20},
-        {text: 'quote8count25d', count: 25},
-        {text: 'quote2count15b', count: 15},
-        {text: 'quote3count20c', count: 20},
-        {text: 'quote4count25d', count: 25},
-        {text: 'quote5count10a', count: 10},
-        {text: 'quote6count15b', count: 15},
-        {text: 'quote7count20c', count: 20},
-        {text: 'quote8count25d', count: 25},
-        {text: 'quote2count15b', count: 15},
-        {text: 'quote3count20c', count: 20},
-        {text: 'quote4count25d', count: 25},
-        {text: 'quote5count10a', count: 10},
-        {text: 'quote6count15b', count: 15},
-        {text: 'quote7count20c', count: 20},
-        {text: 'quote8count25d', count: 25},
-
-    ];
-
+    /** @type {import('./$types').PageData} */
+    export let data: {
+        streamed: {
+            quotes: Promise<Quote[]>
+        }
+    };
 </script>
 
 <div class="word-cloud-container">
-    <WordCloud width={1920} height={1080} words={words} padding={5}></WordCloud>
+    {#await data.streamed.quotes}
+        Loading...
+    {:then quotes}
+        <WordCloud width={1920} height={1080} words={quotes.map(q => ({
+            text: q.text,
+            count: q.votes.length,
+        }))} padding={5} minFontSize={10} maxFontSize={16} backgroundColor="#000"></WordCloud>
+    {:catch error}
+        {error.message}
+    {/await}
 </div>
-
 <style>
     :global(body) {
         width: 100vw;

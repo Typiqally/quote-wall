@@ -3,31 +3,21 @@
     import cloud from "d3-cloud";
     import {select} from "d3-selection";
     import {scaleOrdinal} from "d3-scale";
-    //import * as CS from "d3-scale-chromatic";
 
-    // color scheme
-    /*const color_scheme = {
-        schemeCategory10: CS.schemeCategory10,
-        schemeAccent: CS.schemeAccent,
-        schemeDark2: CS.schemeDark2,
-        schemePaired: CS.schemePaired,
-        schemePastel1: CS.schemePastel1,
-        schemePastel2: CS.schemePastel2,
-        schemeSet1: CS.schemeSet1,
-        schemeSet2: CS.schemeSet2,
-        schemeSet3: CS.schemeSet3,
-        schemeTableau10: CS.schemeTableau10,
-    };*/
+    interface Word extends cloud.Word {
+        count: number
+    }
 
     // props
-    export let words: {text: string, count: number}[] = [];
+    export let words: Word[] = [];
     export let width = 800;
     export let height = 500;
     export let font = "Impact";
+    export let minFontSize = 25;
     export let maxFontSize = 50;
     export let minRotate = 0;
     export let maxRotate = 0;
-    export let scheme = "schemeTableau10";
+    export let scheme = ['#edbb2f', '#ed2fda', '#db041a', '#04dba2', '#7df0d1', '#c0f07d', '#f7cc74', '#026338', '#7748f7', '#c4c1c9'];
     export let padding = 10;
     export let backgroundColor = "#000"
 
@@ -36,34 +26,25 @@
         prev.count < cur.count ? prev.count : cur.count
     );*/
 
-    function findMaxCount()
-    {
-        let cnt: number = 0;
-        words.forEach((word) =>
-        {
-            if(word.count > cnt)
-                cnt = word.count;
-        })
-        return cnt;
-    }
+    const count = words.map(w => w.count)
+    const minWordCount = count.reduce((prev, cur) => prev < cur ? prev : cur);
+    const maxWordCount = count.reduce((prev, cur) => prev > cur ? prev : cur);
 
-    const maxWordCount = findMaxCount();
+    console.log(minWordCount, maxWordCount)
 
     // text color scheme
-    const fill = scaleOrdinal(['#edbb2f', '#ed2fda', '#db041a', '#04dba2', '#7df0d1', '#c0f07d', '#f7cc74', '#026338', '#7748f7', '#c4c1c9']);
+    const fill = scaleOrdinal(scheme);
 
-    const layout = cloud()
+    const layout = cloud<Word>()
         .size([width, height])
         .words(words)
         .padding(padding)
         .rotate(() => ~~(Math.random() * maxRotate) + minRotate)
         .font(font)
-        .fontSize(
-            (d) => Math.floor((d.count / maxWordCount) * maxFontSize)
-        )
+        .fontSize((datum: Word, index: number) => minFontSize + Math.floor((datum.count - minWordCount / (maxWordCount - minWordCount))) * (maxFontSize - minFontSize))
         .on("end", draw);
 
-    function draw(words) {
+    function draw(words: Word[]) {
         select("#wordcloud")
             .append("svg")
             .attr("width", layout.size()[0])
@@ -85,8 +66,7 @@
                 "transform",
                 (d) => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"
             )
-            .text((d) => d.text)
-            .on("end", draw);
+            .text((d) => d.text ?? "Unknown")
     }
 
     // mount
