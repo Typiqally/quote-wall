@@ -15,7 +15,7 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
         if (page) {
             const pageNumber = parseInt(page, 10);
             quotes = await db.quote.findMany({
-                skip: (pageNumber - 1) * 10,
+                skip: pageNumber * 10,
                 take: 10,
                 orderBy: {
                     id: 'asc',
