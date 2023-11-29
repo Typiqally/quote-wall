@@ -4,68 +4,35 @@
 
 ### GET `/api/quotes`
 
-Returns a list of quotes.
+Retrieves quotes with support for pagination, filtering by Discord ID, and searching within the quote text.
 
-#### Parameters
+#### Query Parameters
 
-- `page` (optional): Page number for pagination. If not provided, defaults to the top 20 quotes with more than 3 votes.
+- `page`: Optional. Specifies the page number for pagination.
+- `discordId`: Optional. Filters quotes by Discord ID.
+- `search`: Optional. Searches for text within quotes.
 
-#### Response
+#### Response Status Codes
 
 - **200 OK** - Successfully retrieved quotes.
-- **500 Internal Server Error** - Failed to fetch quotes.
 
-#### Example Usage
-
-```javascript
-fetch('/api/quotes?page=1')
-  .then(response => response.json())
-  .then(data => {
-    // Handle data
-  })
-  .catch(error => {
-    // Handle error
-  });
-```
-
-### DELETE `/api/quotes`
-
-Deletes a quote based on its ID and Discord ID.
-
-#### Request Body
+#### Response Body
 
 ```json
 {
-  "id": "quote_id",
-  "discordId": "discord_user_id"
+  "total_count": 100, // Total count of quotes matching the criteria
+  "page": 1, // Current page number
+  "quotes": [ // Array of quotes
+    {
+      "id": 1,
+      "text": "Quote text",
+      "discordId": "Discord ID",
+      "createdAt": "Timestamp",
+      "updatedAt": "Timestamp"
+    },
+    // More quotes...
+  ]
 }
-```
-
-#### Response
-
-- **200 OK** - Successfully deleted the quote.
-- **500 Internal Server Error** - Failed to delete the quote.
-
-#### Example Usage
-
-```javascript
-fetch('/api/quotes', {
-  method: 'DELETE',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    "id": "quote_id",
-    "discordId": "discord_user_id"
-  })
-})
-  .then(response => response.json())
-  .then(data => {
-    // Handle data
-  })
-  .catch(error => {
-    // Handle error
-  });
 ```
 
 ### POST `/api/quotes`
@@ -76,116 +43,134 @@ Creates a new quote.
 
 ```json
 {
-  "text": "Your quote text here",
-  "discordId": "discord_user_id"
+  "text": "Your quote text",
+  "discordId": "Your Discord ID"
 }
 ```
 
-#### Response
+#### Response Status Codes
 
 - **201 Created** - Successfully created the quote.
-- **500 Internal Server Error** - Failed to create the quote.
+- **400 Bad Request** - Missing quote text.
+- **400 Bad Request** - Missing discord id.
 
-#### Example Usage
+#### Response Body
 
-```javascript
-fetch('/api/quotes', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    "text": "Your quote text here",
-    "discordId": "discord_user_id"
-  })
-})
-  .then(response => response.json())
-  .then(data => {
-    // Handle data
-  })
-  .catch(error => {
-    // Handle error
-  });
+```json
+{
+  "id": 1,
+  "text": "Your quote text",
+  "discordId": "Your Discord ID",
+  "createdAt": "Timestamp",
+  "updatedAt": "Timestamp"
+}
 ```
 
-## Quote Vote Endpoints
+### GET `/api/quotes/top`
 
-### POST `/api/quotes/vote`
+Gets the top 20 quotes with more than 3 votes.
 
-Creates a new quote vote.
+#### Response Status Codes
+
+- **200 OK** - Successfully retrieved quotes.
+
+#### Response Body
+
+```json
+[
+  {
+    "id": 1,
+    "text": "Quote text",
+    "discordId": "Discord ID",
+    "createdAt": "Timestamp",
+    "updatedAt": "Timestamp",
+    "votes": [
+      {
+        "id": 1,
+        "createdAt": "Timestamp",
+        "updatedAt": "Timestamp",
+        "discordId": "Voter's Discord ID",
+        "quoteId": 1 // ID of the associated quote
+      },
+      // More votes...
+    ]
+  },
+  // More quotes...
+]
+```
+
+### DELETE `/api/quotes/[slug]`
+
+Deletes a quote by its ID.
+
+#### Path Parameter
+
+- `slug`: ID of the quote to be deleted.
+
+#### Response Status Codes
+
+- **200 OK** - Successfully deleted quote.
+
+#### Response Body
+
+```json
+{
+  "id": 1,
+  "text": "Quote text",
+  "discordId": "Discord ID",
+  "createdAt": "Timestamp",
+  "updatedAt": "Timestamp"
+}
+```
+
+### POST `/api/quotes/[slug]/vote`
+
+Creates a vote for a specific quote.
+
+#### Path Parameter
+
+- `slug`: ID of the quote.
 
 #### Request Body
 
 ```json
 {
-  "quoteId": "quote_id",
-  "discordId": "discord_user_id"
+  "discordId": "Voter's Discord ID"
 }
 ```
 
-#### Response
-
-- **201 Created** - Successfully created the quote vote.
+#### Response Status Codes
+        
+- **200 OK** - Successfully created the quote vote.
+- **400 Bad Request** - Missing quote text.
+- **400 Bad Request** - Missing discord id.
+- **403 Forbidden** - You have reached the maximum amount of votes.
 - **403 Forbidden** - You have already voted for this quote.
 
-#### Example Usage
+### DELETE `/api/quote/[slug]/vote`
 
-```javascript
-fetch('/api/quotes/vote', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    "quoteId": "quote_id",
-    "discordId": "discord_user_id"
-  })
-})
-  .then(response => response.json())
-  .then(data => {
-    // Handle data
-  })
-  .catch(error => {
-    // Handle error
-  });
-```
+Deletes a vote for a specific quote.
 
-### DELETE `/api/quotes/vote`
+#### Path Parameter
 
-Deletes a quote vote based on its ID and Discord ID.
+- `slug`: ID of the quote.
 
 #### Request Body
 
 ```json
 {
-  "quoteId": "quote_id",
-  "discordId": "discord_user_id"
+  "discordId": "Voter's Discord ID"
 }
 ```
 
-#### Response
+#### Response Status Codes
 
-- **200 OK** - Successfully deleted the quote vote.
-- **403 Forbidden** - You have reached the maximum amount of votes.
+- **200 OK** - Successfully deleted quote.
 
-#### Example Usage
+#### Response Body
 
-```javascript
-fetch('/api/quotes/vote', {
-  method: 'DELETE',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    "quoteId": "quote_id",
-    "discordId": "discord_user_id"
-  })
-})
-  .then(response => response.json())
-  .then(data => {
-    // Handle data
-  })
-  .catch(error => {
-    // Handle error
-  });
+```json
+{
+  "count": 1 // Number of deleted votes
+}
 ```
