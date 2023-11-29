@@ -10,6 +10,8 @@ const responseHeaders = {
 export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     try {
         const page = reqEvent.url.searchParams.get('page');
+        const totalCount = await db.quote.count()
+
         let quotes;
 
         if (page) {
@@ -41,7 +43,10 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
             quotes = filteredQuotes.slice(0, 20);
         }
 
-        return new Response(JSON.stringify(quotes), responseHeaders);
+        return new Response(JSON.stringify({
+            "total_count": totalCount,
+            "quotes": quotes
+        }), responseHeaders);
     } catch (e) {
         throw error(500, 'Failed to fetch quotes.');
     }
