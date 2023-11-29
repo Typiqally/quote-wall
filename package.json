@@ -7,11 +7,19 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig tsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig tsconfig.json --watch",
+		"db:generate": "npx prisma generate",
+		"db:migrate": "npx prisma migrate dev",
+		"db:seed": "npx prisma db seed"
+	},
+	"prisma": {
+		"seed": "npx vite-node prisma/seed.ts"
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^8.3.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.27.4",
+		"@types/node": "^20.10.0",
 		"@types/d3": "^7.4.3",
 		"@types/d3-cloud": "^1.2.9",
 		"@types/d3-scale": "^4.0.8",
@@ -25,6 +33,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@prisma/client": "^5.6.0",
+		"sqlite3": "^5.1.6",
 		"d3": "^7.8.5",
 		"d3-cloud": "^1.2.7",
 		"d3-scale": "^4.0.2",
