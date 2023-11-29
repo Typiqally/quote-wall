@@ -7,7 +7,9 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig tsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig tsconfig.json --watch",
+		"db:generate": "npx prisma generate",
+		"db:seed": "npx prisma db seed"
 	},
 	"prisma": {
 		"seed": "npx vite-node prisma/seed.ts"
