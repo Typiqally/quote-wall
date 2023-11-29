@@ -37,6 +37,7 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
       });
 
       const filteredQuotes = quotesWithVotes.filter((quote) => quote.votes.length >= 3);
+      filteredQuotes.sort((a, b) => b.votes.length - a.votes.length);
       quotes = filteredQuotes.slice(0, 20);
     }
 
