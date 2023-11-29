@@ -24,6 +24,6 @@ model Vote {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   discordId String
-  quote     Quote    @relation("QuoteVotes", fields: [quoteId], references: [id]) // Each vote is associated with a quote
+  quote     Quote    @relation("QuoteVotes", fields: [quoteId], references: [id], onDelete: Cascade) // Each vote is associated with a quote
   quoteId   Int
 }
