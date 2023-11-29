@@ -1,71 +1,58 @@
-import db from '$lib/database';
+import db, {jsonResponseHeaders} from '$lib/database';
 import {error, type RequestEvent, type RequestHandler} from "@sveltejs/kit";
 
-const responseHeaders = {
-    headers: {
-        'Content-Type': 'application/json',
-    },
-};
 
 export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
-    try {
-        const page = reqEvent.url.searchParams.get('page');
-        const totalCount = await db.quote.count()
+    const page = reqEvent.url.searchParams.get('page');
+    const discordId = reqEvent.url.searchParams.get('discordId');
+    const search = reqEvent.url.searchParams.get('search');
 
-        let quotes;
+    let where = {};
 
-        if (page) {
-            const pageNumber = parseInt(page, 10);
-            quotes = await db.quote.findMany({
-                skip: pageNumber * 10,
-                take: 10,
-                orderBy: {
-                    id: 'asc',
-                },
-                include: {
-                    votes: true,
-                }
-            });
-        } else {
-            const quotesWithVotes = await db.quote.findMany({
-                where: {
-                    votes: {
-                        some: {},
-                    },
-                },
-                include: {
-                    votes: true,
-                },
-            });
-
-            const filteredQuotes = quotesWithVotes.filter((quote) => quote.votes.length >= 3);
-            filteredQuotes.sort((a, b) => b.votes.length - a.votes.length);
-            quotes = filteredQuotes.slice(0, 20);
-        }
-
-        return new Response(JSON.stringify({
-            "total_count": totalCount,
-            "quotes": quotes
-        }), responseHeaders);
-    } catch (e) {
-        throw error(500, 'Failed to fetch quotes.');
+    if (discordId) {
+        where = {
+            ...where,
+            discordId: discordId,
+        };
     }
-};
 
-export const DELETE: RequestHandler = async (reqEvent: RequestEvent) => {
-    const {id} = await reqEvent.request.json();
+    if (search) {
+        where = {
+            ...where,
+            text: {
+                contains: search,
+            },
+        };
+    }
 
-    const quote = await db.quote.delete({
-        where: {
-            id: id
-        }
+    const quotes = await db.quote.findMany({
+        where,
+        take: 10,
+        skip: page ? parseInt(page, 10) * 10 : 0,
     });
 
-    return new Response(JSON.stringify(quote), responseHeaders);
-}
+    const totalCount = await db.quote.count({
+        where,
+    });
+
+    return new Response(JSON.stringify({
+        "total_count": totalCount,
+        "page": page ? parseInt(page, 10) : 0,
+        "quotes": quotes
+    }), jsonResponseHeaders);
+};
 
 export const POST: RequestHandler = async (reqEvent: RequestEvent) => {
     const {text, discordId} = await reqEvent.request.json();
+
+    if (!text) {
+        throw error(400, 'Missing quote text.');
+    }
+
+    if (!discordId) {
+        throw error(400, 'Missing discord id.');
+    }
+
     const quote = await db.quote.create({
         data: {
             text,
@@ -75,6 +62,6 @@ export const POST: RequestHandler = async (reqEvent: RequestEvent) => {
 
     return new Response(JSON.stringify(quote), {
         status: 201,
-        ...responseHeaders,
+        ...jsonResponseHeaders,
     });
 }
