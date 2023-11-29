@@ -49,12 +49,11 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
 };
 
 export const DELETE: RequestHandler = async (reqEvent: RequestEvent) => {
-  const { id, discordId } = await reqEvent.request.json();
+  const { id } = await reqEvent.request.json();
 
   const quote = await db.quote.delete({
     where: {
-      id: id,
-      discordId: discordId,
+      id: id
     }
   });
 
