@@ -8,35 +8,48 @@ const responseHeaders = {
 };
 
 export const DELETE: RequestHandler = async (reqEvent: RequestEvent) => {
-  try {
     const { quoteId, discordId } = await reqEvent.request.json();
 
-    const vote = await db.vote.deleteMany({
+    const deletedQuote = await db.vote.deleteMany({
       where: {
         quoteId: quoteId,
         discordId: discordId,
       },
     });
 
-    return new Response(JSON.stringify(vote), responseHeaders);
-  } catch (e) {
-    throw error(500, "Failed to delete quote vote.");
-  }
+    return new Response(JSON.stringify(deletedQuote), responseHeaders);
 }
 
 export const POST: RequestHandler = async (reqEvent: RequestEvent) => {
-  try {
-    const { quoteId, discordId } = await reqEvent.request.json();
+  const { quoteId, discordId } = await reqEvent.request.json();
 
-    const vote = await db.vote.create({
-      data: {
-        quoteId: quoteId,
-        discordId: discordId,
-      },
-    });
+  const amountOfVotes = await db.vote.count({
+    where: {
+      discordId: discordId,
+    },
+  });
 
-    return new Response(JSON.stringify(vote), responseHeaders);
-  } catch (e) {
-    throw error(500, "Failed to create quote vote.");
+  if (amountOfVotes >= 5) {
+    throw error(403, "You have reached the maximum amount of votes.");
   }
+
+  const voteExists = await db.vote.findFirst({
+    where: {
+      quoteId: quoteId,
+      discordId: discordId,
+    },
+  });
+
+  if (voteExists) {
+    throw error(403, "You have already voted for this quote.");
+  }
+
+  const vote = await db.vote.create({
+    data: {
+      quoteId: quoteId,
+      discordId: discordId,
+    },
+  });
+
+  return new Response(JSON.stringify(vote), responseHeaders);
 }

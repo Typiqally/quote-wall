@@ -126,7 +126,7 @@ Creates a new quote vote.
 #### Response
 
 - **201 Created** - Successfully created the quote vote.
-- **500 Internal Server Error** - Failed to create the quote vote.
+- **403 Forbidden** - You have already voted for this quote.
 
 #### Example Usage
 
@@ -166,7 +166,7 @@ Deletes a quote vote based on its ID and Discord ID.
 #### Response
 
 - **200 OK** - Successfully deleted the quote vote.
-- **500 Internal Server Error** - Failed to delete the quote vote.
+- **403 Forbidden** - You have reached the maximum amount of votes.
 
 #### Example Usage
 
