@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts">
     import {onMount} from "svelte";
     import {createEventDispatcher} from "svelte";
     import cloud from "d3-cloud";
