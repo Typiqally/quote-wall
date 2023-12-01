@@ -10,7 +10,7 @@
 
 <div class="word-cloud-container">
     {#if data.quotes}
-        <WordCloud width={1920} height={1200} words={data.quotes.map(q => ({
+        <WordCloud width={1700} height={1000} words={data.quotes.map(q => ({
             text: q.text,
             count: q.votes.length,
         }))} padding={5} minFontSize={16} maxFontSize={24} backgroundColor="#000"/>
