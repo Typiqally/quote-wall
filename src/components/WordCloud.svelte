@@ -25,8 +25,6 @@
     const minWordCount = count.reduce((prev, cur) => prev < cur ? prev : cur);
     const maxWordCount = count.reduce((prev, cur) => prev > cur ? prev : cur);
 
-    console.log(minWordCount, maxWordCount)
-
     // text color scheme
     const fill = scaleOrdinal(scheme);
     const layout = cloud<Word>()
@@ -66,11 +64,9 @@
             .text((d) => d.text ?? "Unknown")
     }
 
-    // mount
-    onMount(async () => {
-        layout.start();
-    });
-
+    onMount(() => {
+        layout.start()
+    })
 </script>
 
 <div id="wordcloud" style="background-color: {backgroundColor};"/>

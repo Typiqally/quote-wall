@@ -1,20 +1,27 @@
 <script lang="ts">
     import WordCloud from "../components/WordCloud.svelte";
     import type {Quote} from "@prisma/client";
+    import {onMount} from "svelte";
 
-    /** @type {import('./$types').PageData} */
-    export let data: {
-        quotes: Quote[]
-    };
+    let quotes: Quote[] = []
+
+    onMount(async () => {
+        setInterval(async () => {
+            const response = await fetch("http://localhost:5173/api/quotes/top")
+            quotes = await response.json()
+        }, 5000)
+    })
 </script>
 
 <div class="word-cloud-container">
-    {#if data.quotes}
-        <WordCloud width={1700} height={1000} words={data.quotes.map(q => ({
+    {#key quotes}
+        {#if quotes.length > 0}
+            <WordCloud width={1700} height={1000} words={quotes.map(q => ({
             text: q.text,
             count: q.votes.length,
         }))} padding={5} minFontSize={16} maxFontSize={72} backgroundColor="#000"/>
-    {/if}
+        {/if}
+    {/key}
 </div>
 <style>
     :global(body) {
