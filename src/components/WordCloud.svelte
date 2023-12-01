@@ -29,23 +29,6 @@
 
     // text color scheme
     const fill = scaleOrdinal(scheme);
-
-    function multilineQuote(quote)
-    {
-        quote = quote.toString();
-        if(quote.length >= 30){
-            let breakSpace:number = quote.indexOf(" ", 20);
-            if(breakSpace !== -1)
-            {
-                let strRebuild: string = quote.substring(0, breakSpace) + "\n" + quote.substring(breakSpace);
-                return strRebuild;
-            }
-        }
-        return quote;
-    }
-
-    words.forEach((word) => word.text = multilineQuote(word.text));
-
     const layout = cloud<Word>()
         .size([width, height])
         .words(words)
