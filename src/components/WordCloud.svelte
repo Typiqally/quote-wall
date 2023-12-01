@@ -17,7 +17,7 @@
     export let maxFontSize = 50;
     export let minRotate = 0;
     export let maxRotate = 0;
-    export let scheme = ['#edbb2f', '#ed2fda', '#db041a', '#04dba2', '#7df0d1', '#c0f07d', '#f7cc74', '#026338', '#7748f7', '#c4c1c9'];
+    export let scheme = ['#8332a8', '#c7a4f5', '#a018de', '#faa7f0', '#c195fc', '#ad5ed1', '#e314cb', '#e8cce5', '#8c71b0', '#c352f7'];
     export let padding = 10;
     export let backgroundColor = "#000"
 
@@ -29,6 +29,22 @@
 
     // text color scheme
     const fill = scaleOrdinal(scheme);
+
+    function multilineQuote(quote)
+    {
+        quote = quote.toString();
+        if(quote.length >= 30){
+            let breakSpace:number = quote.indexOf(" ", 20);
+            if(breakSpace !== -1)
+            {
+                let strRebuild: string = quote.substring(0, breakSpace) + "\n" + quote.substring(breakSpace);
+                return strRebuild;
+            }
+        }
+        return quote;
+    }
+
+    words.forEach((word) => word.text = multilineQuote(word.text));
 
     const layout = cloud<Word>()
         .size([width, height])
