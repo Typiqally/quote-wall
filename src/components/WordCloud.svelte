@@ -12,12 +12,12 @@
     export let words: Word[] = [];
     export let width = 800;
     export let height = 500;
-    export let font = "Impact";
+    export let font = "Bebas Neue";
     export let minFontSize = 25;
     export let maxFontSize = 50;
     export let minRotate = 0;
     export let maxRotate = 0;
-    export let scheme = ['#8332a8', '#c7a4f5', '#a018de', '#faa7f0', '#c195fc', '#ad5ed1', '#e314cb', '#e8cce5', '#8c71b0', '#c352f7'];
+    export let scheme = ['#663366', '#c7a4f5', '#A341A3', '#F060F0', '#c195fc', '#7A317A', '#8F398F', '#e8cce5', '#8c71b0'];
     export let padding = 10;
     export let backgroundColor = "#000"
 

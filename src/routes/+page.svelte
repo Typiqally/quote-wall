@@ -24,6 +24,8 @@
     {/key}
 </div>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
     :global(body) {
         width: 100vw;
         height: 100vh;
