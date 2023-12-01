@@ -6,8 +6,8 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"check": "svelte-kit sync && svelte-check --tsconfig tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig tsconfig.json --watch",
+		"check": "svelte-kit sync && svelte-check --tsconfig src/tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig src/tsconfig.json --watch",
 		"db:generate": "npx prisma generate",
 		"db:migrate": "npx prisma migrate dev",
 		"db:seed": "npx prisma db seed"

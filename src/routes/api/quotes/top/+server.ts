@@ -1,5 +1,6 @@
-import type {error, RequestEvent, RequestHandler} from "@sveltejs/kit";
-import db, {jsonResponseHeaders} from "$lib/database";
+import type {RequestEvent, RequestHandler} from "@sveltejs/kit";
+import db from "$lib/database";
+import {jsonResponseHeaders} from "$lib/response";
 
 export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     const quotes = await db.quote.findMany({
