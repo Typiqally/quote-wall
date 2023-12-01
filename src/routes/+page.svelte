@@ -4,23 +4,17 @@
 
     /** @type {import('./$types').PageData} */
     export let data: {
-        streamed: {
-            quotes: Promise<Quote[]>
-        }
+        quotes: Quote[]
     };
 </script>
 
 <div class="word-cloud-container">
-    {#await data.streamed.quotes}
-        Loading...
-    {:then quotes}
-        <WordCloud width={1920} height={1200} words={quotes.map(q => ({
+    {#if data.quotes}
+        <WordCloud width={1920} height={1200} words={data.quotes.map(q => ({
             text: q.text,
             count: q.votes.length,
         }))} padding={5} minFontSize={16} maxFontSize={24} backgroundColor="#000"/>
-    {:catch error}
-        {error.message}
-    {/await}
+    {/if}
 </div>
 <style>
     :global(body) {
