@@ -3,7 +3,7 @@ import {error, type RequestEvent, type RequestHandler} from "@sveltejs/kit";
 
 export const DELETE: RequestHandler = async (reqEvent: RequestEvent) => {
     const {discordId} = await reqEvent.request.json();
-    const quoteId = reqEvent.params.slug;
+    const quoteId = reqEvent.params.id;
 
     if (!quoteId) {
         throw error(400, 'Missing quote id.');
@@ -25,7 +25,7 @@ export const DELETE: RequestHandler = async (reqEvent: RequestEvent) => {
 
 export const POST: RequestHandler = async (reqEvent: RequestEvent) => {
     const {discordId} = await reqEvent.request.json();
-    const quoteId = reqEvent.params.slug;
+    const quoteId = reqEvent.params.id;
 
     if (!quoteId) {
         throw error(400, 'Missing quote id.');

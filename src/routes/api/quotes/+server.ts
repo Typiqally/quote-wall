@@ -8,6 +8,7 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     const search = reqEvent.url.searchParams.get('search');
 
     let where = {};
+    let pagination = {};
 
     if (discordId) {
         where = {
@@ -25,10 +26,18 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
         };
     }
 
+    if (page) {
+        pagination = {
+            take: 10,
+            skip: page ? parseInt(page, 10) * 10 : 0,
+        }
+    }
+
+
     const quotes = await db.quote.findMany({
         where,
-        take: 10,
-        skip: page ? parseInt(page, 10) * 10 : 0,
+        ...pagination,
+        include: {votes: true}
     });
 
     const totalCount = await db.quote.count({
