@@ -13,7 +13,7 @@
         <WordCloud width={1700} height={1000} words={data.quotes.map(q => ({
             text: q.text,
             count: q.votes.length,
-        }))} padding={5} minFontSize={16} maxFontSize={24} backgroundColor="#000"/>
+        }))} padding={5} minFontSize={16} maxFontSize={56} backgroundColor="#000"/>
     {/if}
 </div>
 <style>

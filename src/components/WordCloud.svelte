@@ -53,7 +53,9 @@
         .random(() => 0.5)
         .rotate(() => ~~(Math.random() * maxRotate) + minRotate)
         .font(font)
-        .fontSize((datum: Word, index: number) => minFontSize + Math.floor((datum.count - minWordCount / (maxWordCount - minWordCount))) * (maxFontSize - minFontSize + 1))
+        .fontSize((datum: Word, index: number) =>
+            Math.floor((maxFontSize - minFontSize) * (datum.count - minWordCount) / (maxWordCount - minWordCount) + minFontSize)
+        )
         .on("end", draw);
 
     function draw(words: Word[]) {
