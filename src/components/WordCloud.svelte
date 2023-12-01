@@ -50,6 +50,7 @@
         .size([width, height])
         .words(words)
         .padding(padding)
+        .random(() => 0.5)
         .rotate(() => ~~(Math.random() * maxRotate) + minRotate)
         .font(font)
         .fontSize((datum: Word, index: number) => minFontSize + Math.floor((datum.count - minWordCount / (maxWordCount - minWordCount))) * (maxFontSize - minFontSize + 1))
