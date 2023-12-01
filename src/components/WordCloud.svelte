@@ -21,11 +21,6 @@
     export let padding = 10;
     export let backgroundColor = "#000"
 
-    // count max word occurence
-    /*const maxWordCount = words.reduce((prev, cur) =>
-        prev.count < cur.count ? prev.count : cur.count
-    );*/
-
     const count = words.map(w => w.count)
     const minWordCount = count.reduce((prev, cur) => prev < cur ? prev : cur);
     const maxWordCount = count.reduce((prev, cur) => prev > cur ? prev : cur);
@@ -41,7 +36,7 @@
         .padding(padding)
         .rotate(() => ~~(Math.random() * maxRotate) + minRotate)
         .font(font)
-        .fontSize((datum: Word, index: number) => minFontSize + Math.floor((datum.count - minWordCount / (maxWordCount - minWordCount))) * (maxFontSize - minFontSize))
+        .fontSize((datum: Word, index: number) => minFontSize + Math.floor((datum.count - minWordCount / (maxWordCount - minWordCount))) * (maxFontSize - minFontSize + 1))
         .on("end", draw);
 
     function draw(words: Word[]) {
