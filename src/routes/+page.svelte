@@ -14,10 +14,10 @@
     {#await data.streamed.quotes}
         Loading...
     {:then quotes}
-        <WordCloud width={1920} height={1080} words={quotes.map(q => ({
+        <WordCloud width={1500} height={1000} words={quotes.map(q => ({
             text: q.text,
             count: q.votes.length,
-        }))} padding={5} minFontSize={10} maxFontSize={16} backgroundColor="#000"></WordCloud>
+        }))} padding={5} minFontSize={16} maxFontSize={24} backgroundColor="#000"></WordCloud>
     {:catch error}
         {error.message}
     {/await}
