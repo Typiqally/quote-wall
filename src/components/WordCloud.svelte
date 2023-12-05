@@ -17,7 +17,17 @@
     export let maxFontSize = 50;
     export let minRotate = 0;
     export let maxRotate = 0;
-    export let scheme = ['#663366', '#c7a4f5', '#A341A3', '#F060F0', '#c195fc', '#7A317A', '#8F398F', '#e8cce5', '#8c71b0'];
+    export let scheme = [
+        '#804080',
+        '#cfabff',
+        '#cc52cc',
+        '#ff66ff',
+        '#c195fc',
+        '#ad45ad',
+        '#b346b3',
+        '#e8cce5',
+        '#a081c9'
+    ];
     export let padding = 10;
     export let backgroundColor = "#000"
 
