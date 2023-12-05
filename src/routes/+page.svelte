@@ -37,6 +37,7 @@
         height: 100vh;
         margin: 0;
         background: black;
+        overflow: hidden;
     }
 
     .word-cloud-container {
