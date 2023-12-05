@@ -6,20 +6,26 @@
     let quotes: Quote[] = []
 
     onMount(async () => {
+        await updateQuotes()
+
         setInterval(async () => {
-            const response = await fetch("http://localhost:5173/api/quotes/top")
-            quotes = await response.json()
+            await updateQuotes()
         }, 5000)
     })
+
+    async function updateQuotes() {
+        const response = await fetch("/api/quotes/top")
+        quotes = await response.json()
+    }
 </script>
 
 <div class="word-cloud-container">
     {#key quotes}
         {#if quotes.length > 0}
-            <WordCloud width={1700} height={1000} words={quotes.map(q => ({
+            <WordCloud width={1920} height={1080} words={quotes.map(q => ({
             text: q.text,
             count: q.votes.length,
-        }))} padding={20} minFontSize={16} maxFontSize={72} backgroundColor="#000"/>
+        }))} padding={5} minFontSize={24} maxFontSize={88} backgroundColor="#000"/>
         {/if}
     {/key}
 </div>
