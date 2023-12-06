@@ -14,7 +14,7 @@ New quotes can be posted by active Delta members who have the correct role in th
 ### Management
 The Discord bot facilitates the management of all quotes. Individuals have the ability to modify or delete their own quotes. Additionally, administrators possess the authority to edit or remove any quote, enabling effective moderation of the quote wall.
 
-### Voting mechanism (future)
+### Voting mechanism
 The quote wall is a community project, so it seems natural to allow for the community to decide which quotes are more important. Through voting, we allow users to mark which quotes they like the most, resulting in a bigger quote on the display. By using this community driven approach, it puts less pressure on the administrators to moderate the quote wall.
 
 ## Built with
@@ -24,27 +24,31 @@ The quote wall is a community project, so it seems natural to allow for the comm
 
 ## Getting started
 ### Prerequisites
+
+- [Node.js 21.*](https://nodejs.org/en)
+- [PNPM](https://pnpm.io/installation)
+
 ### Installation
-Once you've pulled the project, install dependencies with `npm install`.
+Once you've cloned the project, install dependencies with `pnpm install`.
 
 #### Developing
 To start a development server, run either of the following commands:
 
 ```bash
-npm run dev
+pnpm run dev
 
 # or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm run dev -- --open
 ```
 
 #### Building
 To create a production version of your app:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
-You can preview the production build with `npm run preview`.
+You can preview the production build with `pnpm run preview` or run a Node server using `node build`.
 
 ## Contributing
 Contributions for the QuoteWall project will be exclusively handled via GitHub project boards and issues. Since the project operates as an open-source initiative, we encourage and appreciate all forms of contributions that align with the project's core objectives. For additional details, please refer to the [GitHub board]( https://github.com/users/Typiqally/projects/7/views/1).
