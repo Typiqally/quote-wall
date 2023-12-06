@@ -1,0 +1,5 @@
+startup_message off
+set winname class
+
+exec xset -dpms
+exec unclutter & chromium-browser --kiosk --force-dark-mode https://i.imgur.com/9X1b0S9.png
