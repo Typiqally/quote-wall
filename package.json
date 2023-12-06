@@ -13,6 +13,7 @@
 		"db:seed": "npx prisma db seed"
 	},
 	"prisma": {
+		"schema": "src/db/schema.prisma",
 		"seed": "npx vite-node prisma/seed.ts"
 	},
 	"devDependencies": {
