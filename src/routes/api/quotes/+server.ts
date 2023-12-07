@@ -7,6 +7,8 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     const page = reqEvent.url.searchParams.get('page');
     const discordId = reqEvent.url.searchParams.get('discordId');
     const search = reqEvent.url.searchParams.get('search');
+    const id = reqEvent.url.searchParams.get('id');
+
 
     let where = {};
     let pagination = {};
@@ -25,6 +27,13 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
                 contains: search,
             },
         };
+    }
+
+    if (id) {
+        where = {
+            ...where,
+            id: parseInt(id),
+        }
     }
 
     if (page) {
@@ -46,6 +55,7 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     });
 
     return new Response(JSON.stringify({
+
         "totalCount": totalCount,
         "page": page ? parseInt(page, 10) : 0,
         "quotes": quotes
