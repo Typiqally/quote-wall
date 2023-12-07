@@ -1,5 +1,6 @@
-import db, {jsonResponseHeaders} from '$lib/database';
+import db from '$lib/database';
 import {error, type RequestEvent, type RequestHandler} from "@sveltejs/kit";
+import {jsonResponseHeaders} from "$lib/response";
 
 
 export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
@@ -7,6 +8,7 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     const discordId = reqEvent.url.searchParams.get('discordId');
     const search = reqEvent.url.searchParams.get('search');
     const id = reqEvent.url.searchParams.get('id');
+
 
     let where = {};
     let pagination = {};
@@ -53,7 +55,8 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     });
 
     return new Response(JSON.stringify({
-        "total_count": totalCount,
+
+        "totalCount": totalCount,
         "page": page ? parseInt(page, 10) : 0,
         "quotes": quotes
     }), jsonResponseHeaders);
@@ -63,11 +66,21 @@ export const POST: RequestHandler = async (reqEvent: RequestEvent) => {
     const {text, discordId} = await reqEvent.request.json();
 
     if (!text) {
-        throw error(400, 'Missing quote text.');
+        throw error(400, {
+            message: "Text is required"
+        });
+    }
+
+    if (text.length >= 100) {
+        throw error(400, {
+            message: "Text should be less than 100 characters"
+        });
     }
 
     if (!discordId) {
-        throw error(400, 'Missing discord id.');
+        throw error(400, {
+            message: "Missing discord id"
+        });
     }
 
     const quote = await db.quote.create({
