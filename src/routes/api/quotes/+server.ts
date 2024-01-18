@@ -1,12 +1,12 @@
-import db from '$lib/database';
+import db from "$lib/database";
 import {error, type RequestEvent, type RequestHandler} from "@sveltejs/kit";
 import {jsonResponseHeaders} from "$lib/response";
-
 
 export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     const page = reqEvent.url.searchParams.get('page');
     const discordId = reqEvent.url.searchParams.get('discordId');
     const search = reqEvent.url.searchParams.get('search');
+    const id = reqEvent.url.searchParams.get('id');
 
     let where = {};
     let pagination = {};
@@ -27,13 +27,19 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
         };
     }
 
+    if (id) {
+        where = {
+            ...where,
+            id: parseInt(id),
+        }
+    }
+
     if (page) {
         pagination = {
             take: 10,
             skip: page ? parseInt(page, 10) * 10 : 0,
         }
     }
-
 
     const quotes = await db.quote.findMany({
         where,
