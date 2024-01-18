@@ -9,11 +9,11 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
         throw error(400, 'Missing discord id.');
     }
 
-    const getVotes = await db.vote.findMany({
+    const votes = await db.vote.findMany({
         where: {
             discordId: discordId,
         },
     });
 
-    return new Response(JSON.stringify(getVotes), jsonResponseHeaders);
+    return new Response(JSON.stringify(votes), jsonResponseHeaders);
 }

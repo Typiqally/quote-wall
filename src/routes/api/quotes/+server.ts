@@ -1,6 +1,5 @@
-import db, {jsonResponseHeaders} from '$lib/database';
+import db, {jsonResponseHeaders} from "$lib/database";
 import {error, type RequestEvent, type RequestHandler} from "@sveltejs/kit";
-
 
 export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     const page = reqEvent.url.searchParams.get('page');
@@ -40,7 +39,6 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
             skip: page ? parseInt(page, 10) * 10 : 0,
         }
     }
-
 
     const quotes = await db.quote.findMany({
         where,
