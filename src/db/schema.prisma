@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Quote {
+  id        Int      @id @default(autoincrement())
+  text      String
+  discordId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  votes     Vote[]   @relation("QuoteVotes") // A quote can have multiple votes
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  discordId String
+  quote     Quote    @relation("QuoteVotes", fields: [quoteId], references: [id], onDelete: Cascade) // Each vote is associated with a quote
+  quoteId   Int
+}
