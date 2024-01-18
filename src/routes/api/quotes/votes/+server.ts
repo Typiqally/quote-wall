@@ -1,6 +1,7 @@
 import type {RequestEvent, RequestHandler} from "@sveltejs/kit";
-import db, {jsonResponseHeaders} from "$lib/database";
+import db from "$lib/database";
 import {error} from "@sveltejs/kit";
+import {jsonResponseHeaders} from "$lib/response";
 
 export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
     const discordId = reqEvent.url.searchParams.get('discordId');
