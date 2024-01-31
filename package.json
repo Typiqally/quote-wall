@@ -8,9 +8,9 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig src/tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig src/tsconfig.json --watch",
-		"db:generate": "npx prisma generate",
-		"db:migrate": "npx prisma migrate dev",
-		"db:seed": "npx prisma db seed"
+		"db:generate": "pnpx prisma generate",
+		"db:migrate": "pnpx prisma migrate dev",
+		"db:seed": "pnpx prisma db seed"
 	},
 	"prisma": {
 		"schema": "src/db/schema.prisma",
